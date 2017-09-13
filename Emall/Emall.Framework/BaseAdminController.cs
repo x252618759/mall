@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Emall.Framework
 {
-    public class BaseController
+    public class BaseAdminController:BaseController
     {
 
     }
