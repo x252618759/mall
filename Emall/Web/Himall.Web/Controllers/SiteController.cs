@@ -1,0 +1,65 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Diagnostics;
+using System.IO;
+using System.Reflection;
+using System.Web.Configuration;
+using System.Web.Mvc;
+using System.Linq;
+using Himall.Web.Framework;
+
+namespace Himall.Web.Controllers
+{
+    public class SiteController : Controller
+    {
+        // GET: Site
+        public ActionResult Close()
+        {
+            return View();
+        }
+
+        public ActionResult State()
+        {
+            ViewBag.IsDebug = GetSolutionDebugState();
+            return View();
+        }
+
+        private bool GetSolutionDebugState()
+        {
+#if !DEBUG
+            return false;
+#elif DEBUG
+            return true;
+#endif
+            //CompilationSection compilation = ConfigurationManager.GetSection( "system.web/compilation" ) as CompilationSection;
+            //return compilation.Debug;
+        }
+
+        public ActionResult Version()
+        {
+            string path = Path.Combine( AppDomain.CurrentDomain.BaseDirectory , "bin" , "Himall.Web.dll" );
+            Assembly ass = System.Reflection.Assembly.GetExecutingAssembly();
+            //ViewBag.VersionConfig = ass.GetName().Version.ToString();
+            ViewBag.FileVersion = FileVersionInfo.GetVersionInfo( path ).FileVersion;
+            ViewBag.IsDebug = GetSolutionDebugState();
+            return View();
+        }
+        public object GetAppDataUrl()
+        {
+            try
+            {
+                Configuration config = WebConfigurationManager.OpenWebConfiguration(Request.ApplicationPath);
+                var appUrl = config.AppSettings.Settings["AppDateUrl"].Value;
+                var appData = new { Success = "true", Url = appUrl };
+                return Json(appData, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                var appData = new { Success = "false", ErrorMsg = ex.Message };
+                return Json(appData, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+    }
+}

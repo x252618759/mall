@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<MessageStatus xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <OrderCreated>2</OrderCreated>
+  <OrderPay>1</OrderPay>
+  <OrderShipping>1</OrderShipping>
+  <OrderRefund>1</OrderRefund>
+  <FindPassWord>2</FindPassWord>
+  <ShopAudited>1</ShopAudited>
+  <ShopSuccess>1</ShopSuccess>
+  <ShopHaveNewOrder>3</ShopHaveNewOrder>
+  <ReceiveBonus>3</ReceiveBonus>
+  <LimitTimeBuy>3</LimitTimeBuy>
+  <SubscribeLimitTimeBuy>3</SubscribeLimitTimeBuy>
+  <RefundDeliver>1</RefundDeliver>
+</MessageStatus>

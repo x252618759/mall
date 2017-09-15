@@ -1,0 +1,230 @@
+﻿@model Himall.Web.Areas.Web.Models.ShopHomeModel
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta property="qc:admins" content="45417012167221416513066547" />
+    <meta name="renderer" content="webkit|ie-stand" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link href="~/Areas/Web/Content/common.css" rel="stylesheet" />
+    <link href="~/Areas/Web/Content/inner.css" rel="stylesheet" />
+    <link href="~/Areas/Web/Content/artdilog.css" rel="stylesheet" />
+    <link href="/Areas/Web/Content/WebLoginPlug.css" rel="stylesheet" />
+    <link href="/Areas/Web/Content/WebAlertPlug.css" rel="stylesheet" />
+    @RenderSection("Style", false)
+    <script src="~/Scripts/jquery-1.7.1.min.js"></script>
+    <script src="~/Scripts/jQuery.mouseDelay.min.js"></script>
+    <script src="~/Scripts/jquery.scrollLoading.min.js"></script>
+    <script src="~/Areas/Web/Scripts/web.js"></script>
+    <script src="~/Areas/Web/Scripts/userInfo.js"></script>
+    <script src="~/Scripts/jquery.artDialog.js"></script>
+    <script src="~/Areas/Web/Scripts/artDialog.iframeTools.js"></script>
+    <script src="/Areas/Web/Scripts/jQuery.Web.Login.js"></script>
+    <script src="/Areas/Web/Scripts/jQuery.Web.Alert.js"></script>
+    @RenderSection("Script", false)
+    <style type="text/css">
+        .green {
+            color: green;
+            font-size: 15px;
+        }
+
+        .red {
+            color: red;
+            font-size: 15px;
+        }
+    </style>
+    <!--<script>
+        function addFavorite(shopId) {
+            checkLogin(function (func) {
+                addFavoriteFun(shopId, func);
+            });
+        }
+
+        function addFavoriteFun(shopId, callBack) {
+            $.post('/shop/AddFavorite', { shopId: shopId }, function (result) {
+                if (result.success)
+                    $.dialog.succeedTips('关注成功', function () { callBack && callBack(); });
+                else
+                    $.dialog.succeedTips(result.msg, function () { callBack && callBack(); });
+
+            });
+        }
+
+        function checkLogin(callBack) {
+            var memberId = $.cookie('Himall-User');
+            if (memberId) {
+                callBack();
+            }
+            else {
+                $.fn.login({}, function () {
+                    callBack(function () { location.reload(); });
+                }, './', '', '/Login/Login');
+            }
+        }
+    </script>-->
+</head>
+<body>
+    @{Html.RenderAction("ShopHeader", "ProductPartial", new { id = Model.Shop.Id });}
+    <div class="shops cl">
+        <div class="shop-header">
+            @{
+                var src = Model.ImageAds.Count() > 0 ? Model.ImageAds.ElementAt(0).ImageUrl : "";
+                var url = Model.ImageAds.Count() > 0 ? Model.ImageAds.ElementAt(0).Url : "#";
+            }
+
+            <div class="shop-banner">
+                @*<div class="shop_logo"><img width="210" height="90" src="@(string.IsNullOrWhiteSpace(Model.Logo)?"http://fpoimg.com/210x90":Model.Logo)" /></div>*@
+                <a target="_blank" href="@url" style="background-image:url(@(string.IsNullOrWhiteSpace(src)?"http://fpoimg.com/1920x128":src))"></a>
+            </div>
+            <div class="shop-nav cl">
+                <div class="w">
+                    <ul>
+                        @foreach (var nav in Model.Navignations)
+                        {
+                            if (nav.STATUS == 1)
+                            {
+                                <li><a href="@nav.Url">@nav.Name</a></li>
+                            }
+                        }
+                    </ul>
+                    <div class="shop-search"><input id="shopSearchText" placeholder="搜索" type="text" /><a id="shopSearchBtn" class="search-bt"></a></div>
+                </div>
+            </div>
+        </div>
+
+        @RenderBody()
+    </div>
+    <script>
+
+        $(function () {
+
+            $('#shopSearchText').keydown(function (e) {
+                if (e.keyCode == 13) {
+                    var text = $("#shopSearchText").val();
+                    if (text.length === 0) {
+                        $.dialog.errorTips('请输入搜索的关键字');
+                        return;
+                    } else {
+                        location.href = "/Shop/Search?pageNo=1&sid=@Model.Shop.Id&keywords=" + text;
+                    }
+                }
+            });
+
+            $("#shopSearchBtn").click(function () {
+                var text = $("#shopSearchText").val();
+                if (text.length === 0) {
+                    $.dialog.errorTips('请输入搜索的关键字');
+                    return;
+                } else {
+                    location.href = "/Shop/Search?pageNo=1&sid=@Model.Shop.Id&keywords=" + text;
+                }
+            });
+        });
+    </script>
+    @{Html.RenderAction("Foot", "ProductPartial");}
+    @if (((bool?)TempData["isShopPage"]) == true)
+    {
+        var curshopid = TempData["CurShopId"];
+        var getcouponurl = "/Shop/PostShopCoupons/" + curshopid.ToString();
+        var getcancouponurl = "/Shop/PostCanUseShopCoupons/" + curshopid.ToString();
+        <script type="text/javascript">
+
+            var curshopid = "@(curshopid)",
+                couponsUrl = "@(getcouponurl)";
+            canCouponsUrl = "@(getcancouponurl)";
+
+            $.ajax(canCouponsUrl, {
+                type: 'post',
+                dataType: 'json',
+                cache: false,
+                async: false,
+                success: function (data) {
+                    if (data.length > 0) {
+                        var str = '',
+                            cls = '';
+                        str += '<div class="side-asset-list" id="curShopUse"><p>当前店铺可用优惠券</p><ul>';
+                        for (var i = 0; i < data.length; i++) {
+                            cls = '';
+                            if (data[i].Price >= 100) {
+                                cls = "coupon-lg";
+                            } else if (data[i].Price <= 50) {
+                                cls = "coupon-sm";
+                            }
+                            str += '<li class="' + cls + '">' +
+                                '<h5><a>' + data[i].ShopName + '</a></h5>' +
+                                '<h3><span>￥' + data[i].Price + '</span>满' + data[i].OrderAmount + '可用</h3>' +
+                                '<p>截止' + time_string(data[i].EndTime, "yyyy.MM.dd") + '</p>' +
+                            '</li>';
+                        }
+                        str += '</ul></div>';
+
+                        $('.side-asset-total').after(str);
+
+                    }
+                }
+            });
+            $.ajax(couponsUrl, {
+                type: 'post',
+                dataType: 'json',
+                cache: false,
+                async: false,
+                success: function (data) {
+                    if (data.length > 0) {
+                        $('#right_asset .side-point').show();
+                        var pointTime = setTimeout(function () { $('.side-point').hide(); }, 15000);
+                        $('#right_asset').click(function () {
+                            $('.side-point').hide();
+                            clearTimeout(pointTime);
+                        });
+                        var str = '',
+                            cls = '';
+                        str += '<div class="side-asset-list"><p>当前店铺有可领优惠券哦</p><ul>';
+                        for (var i = 0; i < data.length; i++) {
+                            cls = '';
+                            if (data[i].Price >= 100) {
+                                cls = "coupon-lg";
+                            } else if (data[i].Price <= 50) {
+                                cls = "coupon-sm";
+                            }
+                            str += '<li class="getCurCoupon ' + cls + '" data-id="' + data[i].Id + '">' +
+                                '<h5><a>' + data[i].ShopName + '</a></h5>' +
+                                '<h3><span>￥' + data[i].Price + '</span>满' + data[i].OrderAmount + '可用</h3>' +
+                                '<p>截止' + time_string(data[i].EndTime, "yyyy.MM.dd") + '</p>' +
+                            '</li>';
+                        }
+                        str += '</ul></div>';
+
+                        $('#myCouponList').before(str);
+
+                        $('.side-bd').on('click', '.getCurCoupon', function () {
+                            var _this = $(this);
+                            $.post('/shop/ReceiveCoupons?couponId=' + _this.data('id') + '&shopId=' + curshopid, function (data) {
+                                if (data.success) {
+                                    $.dialog.succeedTips('领取成功!', '', 3);
+                                    if ($('#curShopUse').length == 0) {
+                                        $('.side-asset-total').after('<div class="side-asset-list" id="curShopUse"><p>当前店铺可用优惠券</p><ul>');
+                                    }
+                                    $('#curShopUse').append('<li class="' + _this[0].className.replace("getCurCoupon ", "") + '">' + _this.html() + '</li>');
+                                    _this.animate({ height: 0 }, 300, function () {
+                                        if (_this.siblings().length == 0) {
+                                            _this.parent().parent().remove();
+                                        } else {
+                                            _this.remove();
+                                        }
+
+                                    });
+                                } else {
+                                    $.dialog.errorTips(data.msg, 3);
+                                }
+                            });
+                        })
+
+                    }
+                }
+            });
+        </script>
+    }
+</body>
+</html>

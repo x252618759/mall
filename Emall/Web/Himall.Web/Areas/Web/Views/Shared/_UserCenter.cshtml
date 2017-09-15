@@ -1,0 +1,389 @@
+﻿@{
+    Layout = null;
+    var controlname = ViewContext.RouteData.Values["controller"].ToString().ToLower();
+    var actionname = ViewContext.RouteData.Values["action"].ToString().ToLower();
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="renderer" content="webkit|ie-stand" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/Areas/Web/Content/common.css" rel="stylesheet" />
+    <link href="~/Areas/Web/Content/user-center.css" rel="stylesheet" />
+    <link href="~/Areas/Web/Content/artdilog.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.7.1.min.js"></script>
+    <script src="~/Scripts/jquery.nicescroll.min.js"></script>
+    <script src="~/Scripts/jquery.nicescroll.plus.js"></script>
+    <script src="~/Scripts/jquery.artDialog.js"></script>
+    <script src="~/Areas/Web/Scripts/artDialog.iframeTools.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.zh-CN.js"></script>
+    <script src="~/Scripts/CommonJS.js"></script>
+    <script src="~/Scripts/jquery.cookie.js"></script>
+    <style type="text/css">
+        .logo {
+            background: none;
+        }
+
+
+
+
+        .aside {
+            position: absolute;
+            width: 170px;
+            z-index: 2;
+            top: 111px;
+          
+            left: 50%;
+            margin-left: -605px;
+            overflow: hidden;
+        }
+
+            .aside .aside-list {
+                list-style: none;
+                padding-left:11px;
+                margin-left:9px;
+                margin-top:20px;
+                border-left:1px solid #eeeeee;
+
+            }
+            .aside-list .aside-active a:before{
+                 content: "";
+                 width: 2px;
+                 height: 12px;
+                 position: absolute;
+                 background-color: #f63749;
+                 left: -12px;
+                 top: 2px;
+            }
+            .aside-list .aside-active a{color:#f63749;position:relative;font-weight:bold;}
+            .aside li {
+                position: relative;
+
+                font-size:14px;
+                color:#494e52;
+                margin-bottom:18px;
+                line-height:14px;
+            }
+
+                .aside li a {
+                    display: block;
+                    color: #494e52;
+                }
+
+                    .aside li a:hover {
+                       color:#fb4e41;
+                        text-decoration: none;
+                      
+                    }
+
+                .aside li.current a {
+                  
+                    color: #323640;
+                    
+                }
+
+                .aside li.li-lg em{
+                    display:inline-block;
+                    width:3px;
+                    height:3px;
+                    background-color:rgba(93, 97, 99,.75);
+                    position:relative;
+                    left: -10px;
+                    top: -4px;
+                }
+                .aside li.li-lg em.big{
+                    width:4px;height:4px;
+                    background-color:#f63749;
+                }
+
+
+                    .aside span.user-c {
+                        text-indent: 0;
+                        font-weight: bold;
+                        line-height: 16px;
+                        font-size:16px;
+                        color: #2f3031;
+                        margin-bottom: 26px;
+                    }
+                    .aside span.user-c em{
+                        display:inline-block;
+                        width:3px;
+                        height:3px;
+                        background-color:#5d6163;
+                        position: relative;
+                        left: -10px;
+                        top: -5px;
+                    }
+                 
+                .aside li.li-lg {
+                    font-size: 14px;
+                    color:#adadad;
+                    padding-top:10px;
+                    margin-left:-3px;
+                    font-weight:bold;
+                    
+                }
+
+
+                .aside li.li-lg:first-child {
+                    border: 0;
+                }
+
+                .aside li.li-lg a {
+                    color: #000;
+                }
+
+                    .aside li.li-lg a:hover {
+                        color: #e3393c;
+                    }
+
+                .aside li.li-lg.current a {
+                    color: #fff;
+                }
+        .header {
+            width: 100%;
+            background-color: #fff;
+            height: 78px;
+            border-bottom: 1px solid #e3393c;
+        }
+
+        .search-bar {
+            height: 60px;
+            margin: 0 auto;
+            padding: 20px 0 15px;
+            width: 1190px;
+        }
+        .search{width:auto; }
+        .logo {
+            float: left;
+            width: 330px;
+        }
+
+            .logo img {
+                display: inline-block;
+            }
+
+        /*顶部搜索框*/
+        .search {
+            float: right;
+            position: relative;
+            right: 300px;
+        }
+
+        .search-form {
+            border: 1px solid #e50011;
+
+            margin-bottom: 4px;
+            padding: 1px;
+            position: relative;
+            border-right-width:2px
+
+        }
+
+            .search-form ul {
+                background-color: #fff;
+                border: 1px solid #ddd;
+                box-shadow: 0 2px 4px #ddd;
+                display: none;
+                font-size: 14px;
+                line-height: 32px;
+                position: absolute;
+                left: 1px;
+                top: 1px;
+                width: 56px;
+                z-index: 2;
+            }
+
+                .search-form ul li {
+                    cursor: pointer;
+                    text-indent: 12px;
+                    list-style-type: none;
+                }
+
+                    .search-form ul li:hover {
+                        color: #e3393c;
+                    }
+
+            .search-form label::after {
+                border-left: 5px dashed transparent;
+                border-right: 5px dashed transparent;
+                border-top: 5px solid #e3393c;
+                content: "";
+                font-size: 0;
+                height: 0;
+                position: absolute;
+                right: 0;
+                top: 13px;
+                width: 0;
+            }
+
+            .search-form label {
+               color: #666;
+               cursor: pointer;
+               font-size: 14px;
+               line-height: 32px;
+               position: absolute;
+               left: 0;
+               text-indent: 12px;
+               width: 55px;
+               font-weight: normal;
+            }
+
+            .search-form .text {
+                background-color: #fff;
+                border: 0 none;
+                color: rgb(51, 51, 51);
+                font-size: 16px;
+                height: 22px;
+                line-height: 22px;
+                padding:5px 65px 5px 60px;
+                width:280px;
+            }
+
+            .search-form input {
+                float: left;
+            }
+
+            .search-form .button {
+                background: #e3393c none repeat scroll 0 0;
+                border: 0 none;
+                color: #fff;
+                cursor: pointer;
+                font-size: 14px;
+                letter-spacing: 2px;
+                line-height: 32px;
+                width: 76px;
+            }
+    </style>
+    <title>@ViewBag.Title</title>
+</head>
+<body>
+    @{Html.RenderAction("TopInfo", "ProductPartial");}
+
+    <div class="header">
+        <div class="search-bar cl">
+            <div class="logo"><a href="/"><img src="@(SiteSetting.Logo)" height="40" alt="Himall" /></a></div>
+
+            <div class="search">
+                <div class="search-form cl">
+                    <ul>
+                        <li>商品</li>
+                        <li>店铺</li>
+                    </ul>
+                    <label>商品</label>
+                    <input type="text" id="searchBox" class="text" name="" value="" placeholder="@ViewBag.Keyword" />
+                    <input type="button" id="searchBtn" class="button" value="搜索" />
+                </div>
+
+            </div>
+
+
+        </div>
+        <!--search end-->
+    </div>
+
+
+    <div class="aside">
+        <div class="aside-list">
+
+            <span class="user-c"><i></i><em></em><a href="/UserCenter/home" style="color:#2f3031">个人中心</a></span>
+            <ul class="useOrder">
+                <li class="li-lg" style="margin-top:0;"><em class="@( (controlname == "UserOrder".ToLower() || controlname == "UserConsultation".ToLower() || controlname == "UserComment".ToLower())? "big":"")"></em>订单中心</li>
+                <li class="aside-clk @(controlname == "UserOrder".ToLower()? "aside-active":"")"><a href="/UserOrder">我的订单</a></li>
+                <li class="aside-clk @(controlname == "UserConsultation".ToLower() ? "aside-active" : "")"><a href="/UserConsultation">咨询管理</a></li>
+                <li class="li-b aside-clk @(controlname == "UserComment".ToLower() ? "aside-active" : "")"><a href="/UserComment">评价管理</a></li>
+                <li class="li-b aside-clk @(controlname == "UserReservation".ToLower() ? "aside-active" : "")"><a href="/UserReservation">预约到店</a></li>
+            </ul>
+            <ul class="useMoney">
+                <li class="li-lg"><em class="@( (controlname == "UserCoupon".ToLower() || controlname == "UserIntegral".ToLower() || controlname == "UserCapital".ToLower()) ? "big" : "")"></em>资产中心</li>
+                @if (ViewBag.IsOpenLimitTime) 
+                { 
+                    <li class="aside-clk  @(controlname == "UserCoupon".ToLower() ? "aside-active" : "")"><a href="/UserCoupon/index">我的优惠券</a></li>
+                }
+                <li class="aside-clk  @(controlname == "UserIntegral".ToLower() ? "aside-active" : "")"><a href="/UserIntegral/Index">我的积分</a></li>
+                <li class="li-b aside-clk  @(controlname == "UserCapital".ToLower() ? "aside-active" : "")"><a href="/UserCapital/Index">我的账户</a></li>
+                <li class="li-b aside-clk  @(controlname == "UserCenter".ToLower() ? "aside-active" : "")"><a href="/UserCenter/ShowAward">中奖信息</a></li>
+            </ul>
+            <ul class="myFans">
+                <li class="li-lg"><em class="@( (controlname == "ProductConcern".ToLower() || controlname == "ShopConcern".ToLower()) ? "big" : "")"></em>我的关注</li>
+                <li class="aside-clk @(controlname == "ProductConcern".ToLower() ? "aside-active" : "")"><a href="/ProductConcern/index">商品关注</a></li>
+                <li class="li-b aside-clk @(controlname == "ShopConcern".ToLower() ? "aside-active" : "")"><a href="/ShopConcern/Index">店铺关注</a></li>
+            </ul>
+            @if (ViewBag.IsOpenMemberInvite)
+            { 
+            <ul class="expand">
+                <li class="li-lg"><em class="@(controlname == "UserInvite".ToLower() ? "big" : "")"></em>推广</li>
+                <li class="aside-clk li-b @(controlname == "UserInvite".ToLower() ? "aside-active" : "")"><a href="/UserInvite/index">平台推广</a></li>
+            </ul>
+            }
+            <ul class="afterService">
+                <li class="li-lg"><em class="@( (controlname == "OrderRefund".ToLower() || controlname == "OrderComplaint".ToLower()) ? "big" : "")"></em>售后服务</li>
+                <li class="aside-clk @(controlname == "OrderRefund".ToLower() ? "aside-active" : "")"><a href="@Url.Action("List", "OrderRefund", new { Area = "Web", showtype =2})">退换货</a></li>
+                <li class="li-b aside-clk @(controlname == "OrderComplaint".ToLower() ? "aside-active" : "")"><a href="/OrderComplaint">投诉维权</a></li>
+            </ul>
+            <ul class="accMangement">
+                <li class="li-lg"><em class="@( (controlname == "UserAddress".ToLower() || controlname == "UserInfo".ToLower() || controlname == "UserCenter".ToLower()) ? "big" : "")"></em>帐户管理</li>
+                <li class="aside-clk @(controlname == "UserAddress".ToLower() ? "aside-active" : "")"><a href="/UserAddress">收货地址管理</a></li>
+                <li class="aside-clk @(controlname == "UserInfo".ToLower() ? "aside-active" : "")"><a href="/UserInfo/Index">个人信息</a></li>
+                <li class="aside-clk @(controlname == "UserCenter".ToLower() && actionname == "AccountSafety".ToLower() ? "aside-active" : "")"><a href="/UserCenter/AccountSafety">账户安全管理</a></li>
+            </ul>
+           
+        </div>
+    </div>
+    <div class="content">
+        @RenderBody()
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            //下拉菜单
+            $('.top .dropdown').hover(function () {
+                $(this).toggleClass('hover');
+            });
+
+            //搜索切换
+            $('.search-form label').click(function () {
+                $(this).siblings('ul').show();
+            });
+            $('.search-form ul li').click(function () {
+                $(this).parent().hide().siblings('label').text($(this).text());
+            });
+
+
+            $('#searchBtn').click(function () {
+                var keyWords = $.trim($('#searchBox').val());
+
+                var selected = $(".search .search-form label").html();
+                if (selected == "店铺") {
+                    if (keyWords == '') {
+                        $.dialog.errorTips('请输入店铺搜索关键字！');
+                        return;
+                    }
+                    location.href = "/shopsearch?keywords=" + encodeURIComponent(keyWords ? keyWords : $('#searchBox').attr('placeholder'))
+                }
+                else {
+                    location.href = "/search?keywords=" + encodeURIComponent(keyWords ? keyWords : $('#searchBox').attr('placeholder'))
+                }
+
+            });
+
+            $("#searchBox").keydown(function (e) {
+                if (e.keyCode == 13) {
+                    var keyWords = $('#searchBox').val();
+                    location.href = "/search?keywords=" + encodeURIComponent(keyWords ? keyWords : $('#searchBox').attr('placeholder'))
+                }
+            });
+        });
+
+        $(function () {
+            $(".aside-list .aside-clk").click(function () {
+                $(this).addClass("aside-active").siblings().removeClass("aside-active");
+            })
+        })
+
+    </script>
+</body>
+</html>

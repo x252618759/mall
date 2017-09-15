@@ -1,0 +1,14 @@
+Trying to change property 'svn:global-ignores'
+but the property has already been locally changed to a different value.
+Local property value:
+Log
+Storage
+bin
+obj
+temp
+
+Incoming property value:
+bin
+obj
+temp
+
